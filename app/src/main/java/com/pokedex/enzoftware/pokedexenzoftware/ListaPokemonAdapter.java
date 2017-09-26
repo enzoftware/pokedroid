@@ -1,6 +1,7 @@
 package com.pokedex.enzoftware.pokedexenzoftware;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pokedex.enzoftware.pokedexenzoftware.models.Pokemon;
 
 import java.util.ArrayList;
@@ -15,9 +18,11 @@ import java.util.ArrayList;
 public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapter.ViewHolder>{
 
     private ArrayList<Pokemon> dataset;
+    private Context context;
 
-    public ListaPokemonAdapter(){
+    public ListaPokemonAdapter(Context context){
         dataset = new ArrayList<>();
+        this.context = context;
     }
 
     @Override
@@ -30,6 +35,13 @@ public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Pokemon p = dataset.get(position);
         holder.textViewnombre.setText(p.getName());
+
+        Glide.with(context)
+                .load("http://pokeapi.co/media/sprites/pokemon/"+p.getNumber()+".png")
+                .centerCrop()
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageViewfoto);
     }
 
     @Override

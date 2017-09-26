@@ -7,8 +7,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:id="@+id/fotoImgView"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorAccent"/>
+        android:layout_gravity="center_horizontal" />
     
     <TextView
         android:layout_width="match_parent"
