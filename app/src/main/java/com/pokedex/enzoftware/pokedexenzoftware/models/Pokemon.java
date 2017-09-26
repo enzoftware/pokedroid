@@ -1,6 +1,6 @@
 package com.pokedex.enzoftware.pokedexenzoftware.models;
 
-public class pokemon {
+public class Pokemon {
 
     private String name;
 

@@ -6,9 +6,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.pokedex.enzoftware.pokedexenzoftware.models.pokemon;
-import com.pokedex.enzoftware.pokedexenzoftware.models.pokemonRespuesta;
-import com.pokedex.enzoftware.pokedexenzoftware.pokemonapi.pokemonService;
+import com.pokedex.enzoftware.pokedexenzoftware.models.Pokemon;
+import com.pokedex.enzoftware.pokedexenzoftware.models.PokemonRespuesta;
+import com.pokedex.enzoftware.pokedexenzoftware.pokeapi.PokeApiService;
 
 import java.util.ArrayList;
 
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         listaPokemonAdapter = new ListaPokemonAdapter();
         recyclerView.setAdapter(listaPokemonAdapter);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager LayoutManager = new GridLayoutManager(this,3);
-        recyclerView.setLayoutManager(LayoutManager);
+        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+        recyclerView.setLayoutManager(layoutManager);
 
         retrofit = new Retrofit.Builder().baseUrl("http://pokeapi.co/api/v2/").addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -44,19 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void obtenerDatos(){
-        pokemonService service = retrofit.create(pokemonService.class);
-        Call<pokemonRespuesta> pokemonRespuestaCall =  service.obtenerListaPokemones();
-        pokemonRespuestaCall.enqueue(new Callback<pokemonRespuesta>() {
+        PokeApiService service = retrofit.create(PokeApiService.class);
+        Call<PokemonRespuesta> pokemonRespuestaCall =  service.obtenerListaPokemones();
+        pokemonRespuestaCall.enqueue(new Callback<PokemonRespuesta>() {
             @Override
-            public void onResponse(Call<pokemonRespuesta> call, Response<pokemonRespuesta> response) {
+            public void onResponse(Call<PokemonRespuesta> call, Response<PokemonRespuesta> response) {
                 if(response.isSuccessful()){
-                    pokemonRespuesta pokemonrespuesta = response.body();
-                    ArrayList<pokemon> listaPokemon = pokemonrespuesta.getResults();
+                    PokemonRespuesta pokemonrespuesta = response.body();
+                    ArrayList<Pokemon> listaPokemon = pokemonrespuesta.getResults();
 
                     listaPokemonAdapter.adicionarPokemon(listaPokemon);
 
                     for (int i = 0 ; i<listaPokemon.size(); i++){
-                        pokemon p = listaPokemon.get(i);
+                        Pokemon p = listaPokemon.get(i);
                         Log.i(TAG," Pokemon : " + p.getName() );
                     }
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<pokemonRespuesta> call, Throwable t) {
+            public void onFailure(Call<PokemonRespuesta> call, Throwable t) {
                 Log.e(TAG," onFailure " + t.getMessage());
             }
         });

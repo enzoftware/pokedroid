@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PokedexEnzoftware.iml" filepath="$PROJECT_DIR$/PokedexEnzoftware.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pokedex-enzoftware.iml" filepath="$PROJECT_DIR$/pokedex-enzoftware.iml" />
     </modules>
   </component>
 </project>

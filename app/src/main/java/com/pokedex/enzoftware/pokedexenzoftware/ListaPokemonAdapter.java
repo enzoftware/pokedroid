@@ -1,7 +1,6 @@
 package com.pokedex.enzoftware.pokedexenzoftware;
 
 
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pokedex.enzoftware.pokedexenzoftware.models.pokemon;
+import com.pokedex.enzoftware.pokedexenzoftware.models.Pokemon;
 
 import java.util.ArrayList;
 
 public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapter.ViewHolder>{
 
-    private ArrayList<pokemon> dataset;
+    private ArrayList<Pokemon> dataset;
 
     public ListaPokemonAdapter(){
         dataset = new ArrayList<>();
@@ -29,16 +28,16 @@ public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        pokemon p = dataset.get(position);
+        Pokemon p = dataset.get(position);
         holder.textViewnombre.setText(p.getName());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataset.size();
     }
 
-    public void adicionarPokemon(ArrayList<pokemon> listaPokemon) {
+    public void adicionarPokemon(ArrayList<Pokemon> listaPokemon) {
         dataset.addAll(listaPokemon);
         notifyDataSetChanged();
     }
