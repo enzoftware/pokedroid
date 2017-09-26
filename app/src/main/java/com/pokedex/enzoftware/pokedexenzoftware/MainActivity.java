@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private static final String TAG = "POKEDEX";
     private RecyclerView recyclerView;
+    private int offset ;
     private ListaPokemonAdapter listaPokemonAdapter;
+
+    private Boolean aptoCargar = true;
 
 
     @Override
@@ -34,21 +37,46 @@ public class MainActivity extends AppCompatActivity {
         listaPokemonAdapter = new ListaPokemonAdapter(this);
         recyclerView.setAdapter(listaPokemonAdapter);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this,3);
         recyclerView.setLayoutManager(layoutManager);
 
-        retrofit = new Retrofit.Builder().baseUrl("http://pokeapi.co/api/v2/").addConverterFactory(GsonConverterFactory.create()).build();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-        obtenerDatos();
+                if(dy > 0){
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition();
+
+                    if(aptoCargar){
+                        if((visibleItemCount + pastVisibleItem ) >= totalItemCount){
+                            Log.i(TAG,"Llegamos al final");
+
+                            aptoCargar = false;
+                            offset += 20;
+                            obtenerDatos(offset);
+                        }
+                    }
+                }
+            }
+        });
+
+        retrofit = new Retrofit.Builder().baseUrl("http://pokeapi.co/api/v2/").addConverterFactory(GsonConverterFactory.create()).build();
+        aptoCargar = true;
+        offset = 0;
+        obtenerDatos(offset);
     }
 
 
-    private void obtenerDatos(){
+    private void obtenerDatos(int offset){
         PokeApiService service = retrofit.create(PokeApiService.class);
-        Call<PokemonRespuesta> pokemonRespuestaCall =  service.obtenerListaPokemones();
+        Call<PokemonRespuesta> pokemonRespuestaCall =  service.obtenerListaPokemones(20,offset);
         pokemonRespuestaCall.enqueue(new Callback<PokemonRespuesta>() {
             @Override
             public void onResponse(Call<PokemonRespuesta> call, Response<PokemonRespuesta> response) {
+                aptoCargar = true;
                 if(response.isSuccessful()){
                     PokemonRespuesta pokemonrespuesta = response.body();
                     ArrayList<Pokemon> listaPokemon = pokemonrespuesta.getResults();
@@ -67,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PokemonRespuesta> call, Throwable t) {
+                aptoCargar = true;
                 Log.e(TAG," onFailure " + t.getMessage());
             }
         });
