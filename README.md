@@ -6,9 +6,9 @@
 - And Pokemons !!!
 
 ---
-
+<div align="center">
 <img src ="art/screenshot.png" />
-
+</div>
 ---
 
 ## Kotlin soon :koala:
